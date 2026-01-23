@@ -1,0 +1,30 @@
+#version: '3'
+
+services:
+  school_api_server:
+    container_name: school_api_server
+    build: .
+    restart: always
+    environment:
+      - TZ=Europe/Moscow
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./app:/app
+      - ./logs:/logs
+    working_dir: /app
+    depends_on:
+      - school_api_db
+    ports:
+      - '40000:4000'
+
+  school_api_db:
+    image: postgres:latest
+    container_name: school_api_db
+    restart: always
+    environment:
+      POSTGRES_USER: api_user
+      POSTGRES_PASSWORD: api_password
+      POSTGRES_DB: api_db
+    ports:
+      - '4444:5432'
+# End of docker-compose.yml
