@@ -3,10 +3,11 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from pytest import Session
 from . import database
-from .routers import pupil
+from .routers import pupil, user
 
 app = FastAPI()
 app.include_router(pupil.router)
+app.include_router(user.router)
 
 
 @app.get("/")

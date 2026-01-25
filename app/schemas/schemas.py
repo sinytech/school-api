@@ -1,10 +1,24 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 # from datetime import datetime
 # from typing import Optional
 
 # from pydantic.types import conint
 
+# --- User Schemas ---
+class UserBase(BaseModel):
+    email: EmailStr
+    name: str
 
+class UserCreate(UserBase):
+    password: str
+
+class UserOut(UserBase):
+    id: int
+    is_active: bool
+    class Config:
+        from_attributes = True
+
+# --- Pupil Schemas ---
 class PupilBase(BaseModel):
     id: int
     school_id: int
@@ -24,3 +38,9 @@ class PupilOut(PupilBase):
         from_attributes = True
 
 
+
+# --- User with Pupils Schema ---
+
+class UserPupils(UserBase):
+    id: int
+    pupils: list[PupilOut]
