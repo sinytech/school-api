@@ -46,5 +46,5 @@ def get_users_pupils(id: int, db: Session = Depends(get_db)):
                 .filter(models.Pupil.user_id == user.id) \
                 .all()
     
-    output = schemas.UserPupils(id=user.id, email=user.email, name=user.name, pupils=pupils)
+    output = schemas.UserPupils(**user.__dict__, pupils=pupils)
     return output
