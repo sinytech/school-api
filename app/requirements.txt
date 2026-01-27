@@ -11,3 +11,6 @@ pytest-asyncio
 httpx
 gunicorn
 python-dotenv
+python-jose[cryptography]
+passlib
+bcrypt==4.0.1

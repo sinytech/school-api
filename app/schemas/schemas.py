@@ -1,8 +1,15 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
 # from datetime import datetime
-# from typing import Optional
+from typing import Optional
 
-# from pydantic.types import conint
+# --- Auth Schemas ---
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    id: Optional[int] = None
+
 
 # --- User Schemas ---
 class UserBase(BaseModel):

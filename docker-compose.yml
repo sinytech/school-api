@@ -13,7 +13,7 @@ services:
       - DATABASE_PASSWORD=api_password
       - DATABASE_NAME=api_db
       - DATABASE_USERNAME=api_user
-      - SECRET_KEY==01c467dd1e55dc862fcbc0be6cc7393abd4af5e29c12f182737fb3e449ebbedc
+      - SECRET_KEY=01c467dd1e55dc862fcbc0be6cc7393abd4af5e29c12f182737fb3e449ebbedc
       - ALGORITHM=HS256
       - ACCESS_TOKEN_EXPIRE_MINUTES=60
     volumes:
