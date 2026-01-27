@@ -27,7 +27,7 @@ def get_users(db: Session = Depends(get_db), current_user: int = Depends(oauth2.
 @router.get("/me", response_model=schemas.UserOut)
 def get_users_me(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     user = db.query(models.User) \
-                .filter(models.User.id == current_user) \
+                .filter(models.User.id == current_user.id) \
                 .first()
     return user
 

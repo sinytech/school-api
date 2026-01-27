@@ -28,6 +28,7 @@ class UserOut(UserBase):
 # --- Pupil Schemas ---
 class PupilBase(BaseModel):
     id: int
+    user_id: int
     school_id: int
     name: str
     form: str
