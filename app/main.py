@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from pytest import Session
 
 from . import database
-from .routers import auth, pupil, user
+from .routers import auth, pupil, user, mark
 
 app = FastAPI()
 
@@ -21,6 +21,7 @@ app.add_middleware(
 
 app.include_router(pupil.router)
 app.include_router(user.router)
+app.include_router(mark.router)
 app.include_router(auth.router)
 
 

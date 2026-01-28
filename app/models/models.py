@@ -58,6 +58,10 @@ class Mark(Base):
     mark = Column(Integer, nullable = False)
     mark_ref_id = Column(Integer, ForeignKey(
                             "marks.id", ondelete="CASCADE"), nullable=True)
+    mark_date = Column(DateTime, nullable=False)
+    
+    quarter = Column(Integer, nullable = False, server_default='0')
+    notes = Column(String, nullable = True)
 
     published_at = Column(TIMESTAMP(timezone=True), nullable = True)
     created_at = Column(TIMESTAMP(timezone=True),
