@@ -38,17 +38,21 @@ def create_marks(data: schemas.MarkCreate, db: Session = Depends(get_db)):
             mark, notes = parse_mark_data(data.marks[subject][date])
             mark_date = datetime.strptime(date, "%d.%m.%y")
 
-            mark_value=0
+            mark_value=-2
             mark_value_ref=''
 
             if mark=='':
                 mark_value=-1
             
-            if mark!=-1 and type(mark) == str:
+            if isinstance(mark, str) and mark:
                 if len(mark.split("/"))==2:
                     print(f"mark={mark}")
                     mark_value, mark_value_ref = mark.split("/")
                     print(f"Ref Mark Value is not supported yet mark={mark_value} mark_value_ref = {mark_value_ref}")
+                else:
+                    mark_value = int(mark)
+
+            print(f"Origin: {data.marks[subject][date]}, mark={mark}, mark_Value={mark_value}, notes={notes}, mark_value_ref={mark_value_ref}")
 
             old_mark = db.query(models.Mark).filter(
                                 models.Mark.class_id==subj.id, models.Mark.pupil_id == pupil.id,

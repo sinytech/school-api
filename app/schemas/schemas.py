@@ -1,6 +1,5 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
-# from datetime import datetime
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 # --- Auth Schemas ---
 class Token(BaseModel):
@@ -46,12 +45,23 @@ class PupilOut(PupilBase):
         from_attributes = True
 
 
+# --- Class info for mark stats ---
+
+class ClassInfo(BaseModel):
+    average: float
+    marks: List[int]
+
+class PupilStatsOut(PupilCreate):
+    subject: Dict[str, ClassInfo]
+
+class PupilAllStatsOut(BaseModel):
+    pupils: Optional[Dict[int, PupilStatsOut]] = {}
 
 # --- User with Pupils Schema ---
 
 class UserPupils(UserBase):
     id: int
-    pupils: list[PupilOut]
+    pupils: List[PupilOut]
 
 
 class MarkCreate(BaseModel):
@@ -63,4 +73,3 @@ class MarkCreate(BaseModel):
 
 class MarkCreateOut(BaseModel):
     new_marks: int
-    

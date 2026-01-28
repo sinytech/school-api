@@ -75,3 +75,49 @@ def delete_pupil(id: int, db: Session = Depends(get_db), current_user: int = Dep
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+
+@router.get("/{id}/stats", response_model=schemas.PupilStatsOut)
+def get_pupil_stats(id: int, db: Session = Depends(get_db)):
+    pupil = db.query(models.Pupil).filter(models.Pupil.id == id).first()
+
+    if pupil == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Pupil with id: {id} does not exist")
+
+    marks = db.query(models.Mark) \
+                .join(models.Class) \
+                .filter(models.Mark.pupil_id == pupil.id) \
+                .order_by(models.Class.title, models.Mark.mark_date) \
+                .all()
+    
+    # print(f"For pupil id {id} ({pupil.name}) there are following marks: {len(marks)}")
+
+    res = {}
+    for m in marks:
+        if not m.cls.title in res:
+            res[m.cls.title] = {
+                "average": 0,
+                "marks": []
+            }
+        if m.mark>0:
+            res[m.cls.title]["marks"].append(m.mark)    
+
+    for m in res:
+        avg = 0
+        if len(res[m]["marks"]):
+            avg = sum(res[m]["marks"]) / len(res[m]["marks"])
+
+        res[m]["average"]=avg;
+
+    return schemas.PupilStatsOut(**pupil.__dict__, subject=res)
+
+
+@router.get("/stats", response_model=schemas.PupilAllStatsOut)
+def get_pupils_all_stats(db: Session = Depends(get_db)):
+    pupils = db.query(models.Pupil).filter(models.Pupil.user_id == 5).all()
+
+    for p in pupils:
+        # ToDo: re-use business-logic
+        pass
+
+    return schemas.PupilAllStatsOut()
