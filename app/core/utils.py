@@ -1,10 +1,10 @@
 from turtle import title
 from passlib.context import CryptContext
 
-from sqlalchemy.orm import Session
-from .models import models
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(
+                schemes=["bcrypt"],
+                deprecated="auto"
+            )
 
 def hash(password: str):
     try:
@@ -28,16 +28,3 @@ def parse_mark_data(data):
     # Если оценки нет (случай 2), mark будет пустой строкой
     # Если заметки нет (случай 1), note будет пустой строкой
     return mark, note
-
-
-
-def get_class_or_create(db:Session, class_title: str) -> models.Class:
-    my_class = db.query(models.Class).filter(models.Class.title == class_title).first()
-    if not my_class:
-        my_class = models.Class(title=class_title)
-        db.add(my_class)
-        db.commit()
-        db.refresh(my_class)
-
-    return my_class
-

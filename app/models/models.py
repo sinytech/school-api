@@ -1,10 +1,11 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
-from app.database import Base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 
+from app.db.database import Base
 
+""" User entity model """
 class User(Base):
     __tablename__ = 'users'
 
@@ -18,6 +19,7 @@ class User(Base):
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
 
+""" Pupil model """
 class Pupil(Base):
     __tablename__ = 'pupils'
 
@@ -35,7 +37,7 @@ class Pupil(Base):
     
     user = relationship("User")
 
-
+""" Class model """
 class Class(Base):
     __tablename__ = 'classes'
 
@@ -46,6 +48,7 @@ class Class(Base):
                         nullable=False, server_default=text('now()'))
 
 
+""" Mark model """
 class Mark(Base):
     __tablename__ = 'marks'
 
@@ -70,5 +73,4 @@ class Mark(Base):
     pupil   = relationship("Pupil")
     cls     = relationship("Class")
     mark_ref = relationship("Mark", remote_side=[id], backref='ref_marks')
-
 

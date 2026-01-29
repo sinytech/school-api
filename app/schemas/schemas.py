@@ -1,4 +1,5 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from datetime import datetime
+from pydantic import BaseModel, EmailStr
 from typing import Optional, Dict, List
 
 # --- Auth Schemas ---
@@ -73,3 +74,15 @@ class MarkCreate(BaseModel):
 
 class MarkCreateOut(BaseModel):
     new_marks: int
+
+
+class MarkSearchFilter(BaseModel):
+    class_id: Optional[int]
+    pupil_id: Optional[int]
+    mark_date: Optional[datetime]
+    quarter: Optional[int]
+    notes: Optional[str]
+
+class MarkCreateModel(MarkSearchFilter):
+    mark_ref_id: Optional[int] = None
+    mark: Optional[int] = 0

@@ -7,7 +7,7 @@ from alembic import context
 
 # Custom import to get the models' MetaData
 from app.models.models import Base
-from app.config import settings
+from app.core.config import settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
