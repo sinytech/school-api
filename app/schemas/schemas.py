@@ -66,8 +66,9 @@ class UserPupils(UserBase):
 
 
 class MarkCreate(BaseModel):
-    school_id: int
+    school_id: int  # pupil school_id
     quarter: int
+    name: str   # pupil name
     # Dict[название_предмета, Dict[дата, оценка_или_текст]]
     marks: Dict[str, Dict[str, str]]
 

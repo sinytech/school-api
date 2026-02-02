@@ -16,15 +16,17 @@ def verify(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-# Парсим строку по 8|note
 def parse_mark_data(data):
-    # partition делит строку по первому встречному '|'
+    """
+        Do correct parsing input string 8|note into 3 different cases:
+        1) Input "8|some notes" -> mark = 8, note = 'some notes'
+        2) Input "|some notes" -> mark = '', note = 'some notes'
+        3) Input "8" -> mark = '8', note = ''
+    """
+
     mark, separator, note = data.partition('|')
     
-    # Убираем лишние пробелы, если они есть
     mark = mark.strip()
     note = note.strip()
     
-    # Если оценки нет (случай 2), mark будет пустой строкой
-    # Если заметки нет (случай 1), note будет пустой строкой
     return mark, note

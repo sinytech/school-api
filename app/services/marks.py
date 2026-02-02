@@ -10,8 +10,8 @@ from app.crud import classes as crud_class, pupils as crud_pupils, marks as crud
 from app.services import marks as service_mark
 
 
-""" Create statistics for pupil for current quarter """
 def get_pupil_marks_stats(db: Session, pupil: models.Pupil) -> schemas.PupilStatsOut:
+    """ Create statistics for pupil for current quarter """
     
     # ToDo: add quarter selection
 
@@ -36,14 +36,14 @@ def get_pupil_marks_stats(db: Session, pupil: models.Pupil) -> schemas.PupilStat
         if len(res[m]["marks"]):
             avg = sum(res[m]["marks"]) / len(res[m]["marks"])
 
-        res[m]["average"]=avg;
+        res[m]["average"]=f"{avg:.2f}";
 
     return schemas.PupilStatsOut(**pupil.__dict__, subject=res)
 
 
-""" Create marks stats for all owner's pupils """
 def get_pupil_marks_all_stats(db: Session, owner: models.User )-> schemas.PupilAllStatsOut:
-    
+    """ Create marks stats for all owner's pupils """
+
     pupils = crud_pupils.get_pupils_by_owner_id(db, owner.id)
 
     result = {}
@@ -53,8 +53,8 @@ def get_pupil_marks_all_stats(db: Session, owner: models.User )-> schemas.PupilA
     return schemas.PupilAllStatsOut(pupils=result)
 
 
-""" """
 def parse_pupil_marks(db: Session, pupil: models.Pupil, data: schemas.MarkCreate) -> schemas.MarkCreateOut:
+    """ Parse and add pupil marks from input data """
     
     new_marks_creted = 0
 

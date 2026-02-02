@@ -5,8 +5,9 @@ from sqlalchemy.sql.sqltypes import TIMESTAMP
 
 from app.db.database import Base
 
-""" User entity model """
 class User(Base):
+    """ User entity model """
+
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key = True, nullable = False)
@@ -19,8 +20,9 @@ class User(Base):
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
 
-""" Pupil model """
 class Pupil(Base):
+    """ Pupil model """
+
     __tablename__ = 'pupils'
 
     id = Column(Integer, primary_key = True, nullable = False)
@@ -37,8 +39,10 @@ class Pupil(Base):
     
     user = relationship("User")
 
-""" Class model """
+
 class Class(Base):
+    """ Class model """
+
     __tablename__ = 'classes'
 
     id = Column(Integer, primary_key = True, nullable = False)
@@ -48,8 +52,9 @@ class Class(Base):
                         nullable=False, server_default=text('now()'))
 
 
-""" Mark model """
 class Mark(Base):
+    """ Mark model """
+
     __tablename__ = 'marks'
 
     id = Column(Integer, primary_key = True, nullable = False)
