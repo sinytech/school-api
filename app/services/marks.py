@@ -4,13 +4,13 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 
 from app.models import models
-from app.schemas import schemas
+from app.schemas import pupils as schema_pupils, marks as schema_marks, report as schema_report
 from app.core import utils
 from app.crud import classes as crud_class, pupils as crud_pupils, marks as crud_marks
 from app.services import marks as service_mark
 
 
-def get_pupil_marks_stats(db: Session, pupil: models.Pupil) -> schemas.PupilStatsOut:
+def get_pupil_marks_stats(db: Session, pupil: models.Pupil) -> schema_report.PupilStatsOut:
     """ Create statistics for pupil for current quarter """
     
     # ToDo: add quarter selection
@@ -36,12 +36,12 @@ def get_pupil_marks_stats(db: Session, pupil: models.Pupil) -> schemas.PupilStat
         if len(res[m]["marks"]):
             avg = sum(res[m]["marks"]) / len(res[m]["marks"])
 
-        res[m]["average"]=f"{avg:.2f}";
+        res[m]["average"]=f"{avg:.2f}"
 
-    return schemas.PupilStatsOut(**pupil.__dict__, subject=res)
+    return schema_report.PupilStatsOut(**pupil.__dict__, subject=res)
 
 
-def get_pupil_marks_all_stats(db: Session, owner: models.User )-> schemas.PupilAllStatsOut:
+def get_pupil_marks_all_stats(db: Session, owner: models.User )-> schema_report.PupilAllStatsOut:
     """ Create marks stats for all owner's pupils """
 
     pupils = crud_pupils.get_pupils_by_owner_id(db, owner.id)
@@ -50,10 +50,10 @@ def get_pupil_marks_all_stats(db: Session, owner: models.User )-> schemas.PupilA
     for p in pupils:
         result[p.id] = get_pupil_marks_stats(db, p)
 
-    return schemas.PupilAllStatsOut(pupils=result)
+    return schema_report.PupilAllStatsOut(pupils=result)
 
 
-def parse_pupil_marks(db: Session, pupil: models.Pupil, data: schemas.MarkCreate) -> schemas.MarkCreateOut:
+def parse_pupil_marks(db: Session, pupil: models.Pupil, data: schema_marks.MarkCreate) -> schema_marks.MarkCreateOut:
     """ Parse and add pupil marks from input data """
     
     new_marks_creted = 0
@@ -88,7 +88,7 @@ def parse_pupil_marks(db: Session, pupil: models.Pupil, data: schemas.MarkCreate
             old_mark = crud_marks.get_mark_by_filter(db, filter=filter)
             
             if not old_mark:
-                mark_value_schema = schemas.MarkCreateModel(
+                mark_value_schema = schema_marks.MarkCreateModel(
                     class_id=subj.id,
                     pupil_id=pupil.id,
                     mark_date=mark_date,
@@ -117,4 +117,4 @@ def parse_pupil_marks(db: Session, pupil: models.Pupil, data: schemas.MarkCreate
 
             print(f"Subject: {subj.title}, date: {date}: {data.marks[subject][date]} -- mark: {mark_value} | note: {notes}")
 
-    return schemas.MarkCreateOut(new_marks = new_marks_creted)
+    return schema_marks.MarkCreateOut(new_marks = new_marks_creted)

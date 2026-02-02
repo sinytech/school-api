@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.db import database
-from app.schemas import schemas
+from app.schemas import auth
 from app.models import models
 from app.crud import users as crud_user
 
@@ -34,7 +34,7 @@ def verify_access_token(token: str, credentials_exception):
         id: str = payload.get("user_id")
         if id is None:
             raise credentials_exception
-        token_data = schemas.TokenData(id=id)
+        token_data = auth.TokenData(id=id)
     except JWTError:
         raise credentials_exception
 

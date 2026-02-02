@@ -3,7 +3,7 @@ from typing import Optional
 
 from app.core import utils
 from app.models import models
-from app.schemas import schemas
+from app.schemas import users as schema_users
 
 
 def get_user_by_email(db: Session, email: str) -> models.User | None:
@@ -35,7 +35,7 @@ def get_all_users_by(db: Session, limit: int = 10, skip: int = 0, search: Option
     
     return users
 
-def create_user_with_password_hash(db: Session, user: schemas.UserCreate) -> models.User:
+def create_user_with_password_hash(db: Session, user: schema_users.UserCreate) -> models.User:
     """ Create user by schemas.UserCreate schema """
 
     hashed_password = utils.hash(user.password)

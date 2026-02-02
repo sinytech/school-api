@@ -1,13 +1,12 @@
 import json
 from fastapi import APIRouter, Depends, status, HTTPException, Response, Request
-from fastapi.encoders import jsonable_encoder
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from app.core import oauth2
 from app.db import database
 
-from app.schemas import schemas
+from app.schemas import auth
 from app.core import utils
 
 from app.crud import users as crud_users
@@ -15,7 +14,7 @@ from app.crud import users as crud_users
 router = APIRouter(tags=['Authentication'])
 
 
-@router.post('/login', response_model=schemas.Token)
+@router.post('/login', response_model=auth.Token)
 def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(database.get_db)):
 
     user = crud_users.get_user_by_email(db, user_credentials.username)

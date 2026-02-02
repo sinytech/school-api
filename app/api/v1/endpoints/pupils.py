@@ -2,7 +2,7 @@ from fastapi import  status, HTTPException, Depends, APIRouter, Response
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
-from app.schemas import schemas
+from app.schemas import pupils as schema_pupils, report as schema_report
 from app.db.database import get_db
 from app.core import oauth2
 from app.models import models
@@ -14,24 +14,24 @@ router = APIRouter(
     tags=['Pupils']
 )
 
-@router.get("/", response_model=List[schemas.PupilOut])
+@router.get("/", response_model=List[schema_pupils.PupilOut])
 def get_pupils(db: Session = Depends(get_db), user: int = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
 
-    pupils = crud_pupils.get_pupils_by(db=db, owner = user, limit=limit, skip=skip, search=search)
+    schema_pupils = crud_pupils.get_pupils_by(db=db, owner = user, limit=limit, skip=skip, search=search)
 
-    return pupils
+    return schema_pupils
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.PupilOut)
-def create_pupil(pupil: schemas.PupilCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schema_pupils.PupilOut)
+def create_pupil(pupil: schema_pupils.PupilCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
 
     new_pupil = crud_pupils.create_pupil(db, pupil=pupil, owner=current_user)
 
     return new_pupil
 
 
-@router.put("/{id}", response_model=schemas.PupilOut)
-def update_pupil(id: int, updated_pupil: schemas.PupilCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+@router.put("/{id}", response_model=schema_pupils.PupilOut)
+def update_pupil(id: int, updated_pupil: schema_pupils.PupilCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
 
     pupil = crud_pupils.get_pupil_by_id(db, id)
 
@@ -64,7 +64,7 @@ def delete_pupil(id: int, db: Session = Depends(get_db), current_user: int = Dep
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.get("/{id}/stats", response_model=schemas.PupilStatsOut)
+@router.get("/{id}/stats", response_model=schema_report.PupilStatsOut)
 def get_pupil_stats(id: int, db: Session = Depends(get_db)):
 
     pupil = crud_pupils.get_pupil_by_id(db, id)
@@ -76,7 +76,7 @@ def get_pupil_stats(id: int, db: Session = Depends(get_db)):
     return services_mark.get_pupil_marks_stats(db, pupil=pupil)
 
 
-@router.get("/stats", response_model=schemas.PupilAllStatsOut)
+@router.get("/stats", response_model=schema_report.PupilAllStatsOut)
 def get_pupil_all_stats(db: Session = Depends(get_db), owner: models.User = Depends(oauth2.get_current_user)):
 
     return services_mark.get_pupil_marks_all_stats(db, owner=owner)
